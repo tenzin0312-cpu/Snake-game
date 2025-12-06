@@ -1,1 +1,231 @@
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;}
+body{
+  /* background can be the decorative image + gradient */
+  /* background: linear-gradient(135deg, #e1f0ff, #f8ffff); */
+  background-image: url("assets/img.jpg");
+  background-size: cover;
+  background-position: center;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  color: #0b2540;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.3);
+  pointer-events:none;
+}
+
+/* app container */
+.app{
+  width:100%;
+  max-width:1100px;
+  background: rgba(255,255,255,0.9);
+  border-radius:12px;
+  padding:1rem;
+  box-shadow:0 12px 36px rgba(0,0,0,0.15);
+}
+
+/* top bar */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:0.75rem;
+  margin-bottom:1rem;
+}
+
+.brand{
+  font-weight:700;
+  font-size:1.4rem;
+  color:#0077ff;
+}
+
+/* score area */
+.score-area{display:flex;gap:0.5rem}
+#scoreBox,#highScore{
+  background:#fff;
+  padding:0.5rem 0.75rem;
+  border-radius:8px;
+  font-weight:600;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* controls */
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0.4rem;
+}
+.btn{
+  background:#fff;
+  border:1px solid #ddd;
+  padding:0.45rem 0.7rem;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn.primary{
+  background:#0077ff;
+  color:#fff;
+  border:none;
+}
+select{
+  padding:0.4rem 0.6rem;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-weight:600;
+}
+
+/* board (direct sizes used) */
+/* board is 18 x 18 grid; size uses min(86vmin, 640px) */
+.board{
+  /* make the board take full available width but stay responsive */
+  width: 100%;
+  max-width: 900px; /* extend width limit — you can tweak 900px → 1000px if you want more */
+  height: min(80vmin, 640px); /* slightly shorter than before, still square-like */
+  
+  display: grid;
+  grid-template-rows: repeat(18, 1fr);
+  grid-template-columns: repeat(18, 1fr);
+
+  background: linear-gradient(180deg, #b3e5ff, #e8ffff);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  overflow: hidden;
+  touch-action: none;
+  margin: 0 auto; /* center it within the .app container */
+}
+
+
+/* Sanke Game Part 2 start here  */
+
+
+/* snake + foods */
+/* Make snake segments and food centered and square inside each grid cell */
+
+.head {
+  place-self: center;
+  width: 90%;
+  height: 65%;
+  display: block;
+  border-radius: 45% 45% 35% 35%; /* rounded top, slightly flatter bottom */
+  background-color: #ff6600;
+  border: 2px solid #cc5200;
+}
+.snake {
+  place-self: center;
+  width: 75%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 50%;
+  background-color: #ffd700; /* golden yellow body */
+  border: 1px solid #ccaa00;
+}
+/* Food styling — simple, bright, solid colors */
+.food-small {
+  place-self: center;
+  width: 55%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 50%;
+  background-color: #ff3b3b; /* red */
+  border: 1px solid #cc0000;
+}
+
+
+.food-mid {
+  place-self: center;
+  width: 65%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 50%;
+  background-color: #1e90ff; /* blue */
+  border: 1px solid #0047b3;
+}
+.food-big {
+  place-self: center;
+  width: 75%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  border-radius: 50%;
+  background-color: #32cd32; /* green */
+  border: 1px solid #228b22;
+}
+
+
+/* Example: if you want the snake segments to keep a pill look on wide cells, use:
+.snake { border-radius: 20%; } 
+.head { border-radius: 34%; } 
+*/
+
+/* overlays */
+.overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,0.5);
+  z-index:10;
+}
+.hidden{display:none}
+.card{
+  background:white;
+  border-radius:12px;
+  padding:1.25rem;
+  text-align:center;
+  width:min(400px,90%);
+}
+.card input{
+  padding:0.5rem;
+  margin-top:0.5rem;
+  width:70%;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+.actions{margin-top:1rem;display:flex;justify-content:center;gap:0.5rem}
+
+/* mobile controls */
+.mobile-controls{display:none;user-select:none;margin-top:0.5rem}
+.mbtn{
+  padding:0.5rem 0.75rem;
+  font-size:1rem;
+  border-radius:8px;
+  border:1px solid #ccc;
+  background:#fff;
+  font-weight:700;
+  margin:0.2rem;
+}
+
+.footer{
+  margin-top:0.8rem;
+  text-align:center;
+  font-size:0.85rem;
+  color:#555;
+}
+
+/* responsive: on small screens use smaller board size (min(80vmin,520px)) */
+@media(max-width:720px){
+  .mobile-controls{display:block}
+  .topbar{flex-direction:column;align-items:flex-start}
+
+  .board{
+    width: min(80vmin, 520px);
+    height: min(80vmin, 520px);
+    grid-template-rows: repeat(18,1fr);
+    grid-template-columns: repeat(18,1fr);
+  }
+}
+
+
+
+
 
